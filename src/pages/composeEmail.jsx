@@ -10,7 +10,7 @@ const ComposeEmail = () => {
         <button onClick={() => navigate(-1)} className='text-xl'>
           ←
         </button>
-        <p className='text-lg ml-auto mr-auto font-semibold'>New Message</p>
+        <p className='text-xl ml-auto mr-auto font-semibold'>New Message</p>
       </div>
 
       <div className='py-8'>

@@ -1,7 +1,7 @@
 import React from "react";
 import InboxEmail from "./inboxEmail";
 
-const Inbox = () => {
+const Inbox = ({ updateSetOpenEmail }) => {
   const tempEmailList = [...Array(10).keys()];
   const allEmails = tempEmailList.map((num) => {
     return (
@@ -11,6 +11,7 @@ const Inbox = () => {
         body={
           " Body of the email is here so we will see how long we can make this before it cuts itself off Body of the email is here so we will see ho long we can make this before it cuts itself off Body of the email is here so we will see how long we can make this before it cuts itself off"
         }
+        updateSetOpenEmail={updateSetOpenEmail}
       />
     );
   });

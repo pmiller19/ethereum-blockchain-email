@@ -11,7 +11,7 @@ const ConnectWalletForm = () => {
           aria-label='Full name'
         />
         <button
-          class='flex-shrink-0 bg-indigo-500 hover:bg-pink-500 border-indigo-500 hover:border-pink-500 text-sm border-4 text-white py-1 px-2 rounded'
+          class='flex-shrink-0 bg-indigo-500 hover:bg-pink-500 border-indigo-500 hover:border-pink-500 text-sm border-4 text-white py-1 px-2 rounded transition animate ease-in-out delay-250 duration-300'
           type='button'
         >
           Connect Wallet
