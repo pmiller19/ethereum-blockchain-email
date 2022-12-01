@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmailPage from "../components/emailPage";
 import Inbox from "../components/inbox";
+import MailLogo from "../assets/mailLogo.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { useProvider } from "wagmi";
@@ -160,7 +161,15 @@ const Dashboard = () => {
           updateSetOpenEmail={updateSetOpenEmail}
         />
       ) : (
-        <Inbox updateSetOpenEmail={updateSetOpenEmail} />
+        <div>
+          <Inbox updateSetOpenEmail={updateSetOpenEmail} />
+          <div className='text-center'>
+            <img className='mt-48 h-16 w-auto ml-auto mr-auto' src={MailLogo} />
+            <p className='text-xs font-light mt-2'>
+              The best solution for safe and secure emails.
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );
