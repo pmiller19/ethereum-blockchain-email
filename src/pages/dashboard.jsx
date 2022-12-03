@@ -4,26 +4,8 @@ import EmailPage from "../components/emailPage";
 import Inbox from "../components/inbox";
 import MailLogo from "../assets/mailLogo.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import sorceryMailAbi from "../constants/sorceryMailAbi";
-import { smartContractAddress } from "../constants/smartContractAddress";
-
-import { useProvider } from "wagmi";
-import { useSigner } from "wagmi";
-import { useContractRead } from "wagmi";
 
 const Dashboard = () => {
-  //#region how to get the wallet address of the sender
-  const provider = useProvider();
-  const { data: signer } = useSigner();
-  //#endregion
-
-  //#region how to read a contract docs here: https://wagmi.sh/react/hooks/useContractRead
-  const { data } = useContractRead({
-    address: smartContractAddress,
-    abi: sorceryMailAbi,
-    functionName: "retrieveAll",
-  });
-
   const navigate = useNavigate();
   const [openEmail, setOpenEmail] = useState({
     from: "",
@@ -33,10 +15,6 @@ const Dashboard = () => {
   });
 
   const updateSetOpenEmail = (from, subject, body, isOpen) => {
-    console.log(provider);
-    // TODO use signer to get the wallet address
-    console.log(signer);
-    console.log("Email data: ", data);
     setOpenEmail({ from: from, subject: subject, body: body, isOpen: isOpen });
   };
 
@@ -62,7 +40,7 @@ const Dashboard = () => {
         />
       ) : (
         <div>
-          <Inbox updateSetOpenEmail={updateSetOpenEmail} data={data} />
+          <Inbox updateSetOpenEmail={updateSetOpenEmail} />
           <div className='text-center'>
             <img className='mt-48 h-16 w-auto ml-auto mr-auto' src={MailLogo} />
             <p className='text-xs font-light mt-2'>

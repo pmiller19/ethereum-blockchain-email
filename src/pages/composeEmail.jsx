@@ -13,6 +13,7 @@ import moment from "moment";
 
 const ComposeEmail = () => {
   const navigate = useNavigate();
+  // const { from } = navigate.state;
 
   const [recipient, setRecipient] = useState("");
   const [subject, setSubject] = useState("");
@@ -34,11 +35,17 @@ const ComposeEmail = () => {
   });
 
   useEffect(() => {
+    setRecipient("");
+    setSubject("");
+    setBody("");
+  }, [isSuccess]);
+
+  useEffect(() => {
     setDisabledButton(
       !recipient || !subject || !body || !write || isLoading || !signer
     );
-    console.log(signer._address);
-    console.log(moment().format());
+    console.log(signer?._address);
+    console.log(moment().format("MMM Do"));
   }, [recipient, subject, body, write, isLoading]);
 
   return (
