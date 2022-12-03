@@ -7,6 +7,9 @@ import {
   useSigner,
 } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import sorceryMailAbi from "../constants/sorceryMailAbi";
+import { smartContractAddress } from "../constants/smartContractAddress";
+import moment from "moment";
 
 const ComposeEmail = () => {
   const navigate = useNavigate();
@@ -19,17 +22,10 @@ const ComposeEmail = () => {
 
   // TODO add something for if it is a success (maybe a useEffect that displays a message and sends the user back to dashboard)
   const { config } = usePrepareContractWrite({
-    address: "0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2",
-    abi: [
-      {
-        name: "mint",
-        type: "function",
-        stateMutability: "nonpayable",
-        inputs: [],
-        outputs: [],
-      },
-    ],
-    functionName: "mint",
+    address: smartContractAddress,
+    abi: sorceryMailAbi,
+    functionName: "store",
+    args: [recipient, subject, body, moment().format()],
   });
   const { data, write } = useContractWrite(config);
 
@@ -41,6 +37,8 @@ const ComposeEmail = () => {
     setDisabledButton(
       !recipient || !subject || !body || !write || isLoading || !signer
     );
+    console.log(signer._address);
+    console.log(moment().format());
   }, [recipient, subject, body, write, isLoading]);
 
   return (
