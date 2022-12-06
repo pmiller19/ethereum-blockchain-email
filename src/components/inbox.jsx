@@ -60,7 +60,16 @@ const Inbox = ({ updateSetOpenEmail }) => {
         <p className='text-xl font-semibold mx-2'>Inbox</p>
         <button onClick={() => window.location.reload(false)}>⟳</button>
       </div>
-      {allEmails}
+      {/* {allEmails} */}
+      {!signer ? (
+        <div className='mt-10 mb-10 flex'>
+          <p className='text-gray-400 text-xl ml-auto mr-auto'>
+            No Data, Please Connect Wallet
+          </p>
+        </div>
+      ) : (
+        allEmails
+      )}
     </div>
   );
 };
