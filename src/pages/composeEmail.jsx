@@ -5,11 +5,14 @@ import {
   useContractWrite,
   useWaitForTransaction,
   useSigner,
+  useSignMessage,
 } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import sorceryMailAbi from "../constants/sorceryMailAbi";
 import { smartContractAddress } from "../constants/smartContractAddress";
 import moment from "moment";
+import { verifyMessage } from "ethers/lib/utils.js";
+import CryptoJS from "crypto-js";
 
 const ComposeEmail = () => {
   const navigate = useNavigate();
@@ -18,15 +21,16 @@ const ComposeEmail = () => {
   const [recipient, setRecipient] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [ciphertext, setCiphertext] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
   const { data: signer } = useSigner();
 
   // TODO add something for if it is a success (maybe a useEffect that displays a message and sends the user back to dashboard)
-  const { config } = usePrepareContractWrite({
+  const { config, status } = usePrepareContractWrite({
     address: smartContractAddress,
     abi: sorceryMailAbi,
     functionName: "store",
-    args: [recipient, subject, body, moment().format()],
+    args: [recipient, subject, ciphertext, moment().format()],
   });
   const { data, write } = useContractWrite(config);
 
@@ -38,15 +42,48 @@ const ComposeEmail = () => {
     setRecipient("");
     setSubject("");
     setBody("");
+    setCiphertext("");
   }, [isSuccess]);
 
   useEffect(() => {
     setDisabledButton(
-      !recipient || !subject || !body || !write || isLoading || !signer
+      !recipient || !subject || !body || !write || isLoading || !signer || status === "loading"
     );
-    console.log(signer?._address);
-    console.log(moment().format("MMM Do"));
+    // console.log(signer?._address);
+    // console.log(moment().format("MMM Do"));
   }, [recipient, subject, body, write, isLoading]);
+
+  // const { data: signedData, error, signIsLoading, signMessage } = useSignMessage({
+  //   onSuccess(data, variables) {
+  //     // Verify signature when sign message succeeds
+  //     const address = verifyMessage(variables.message, data)
+  //     console.log('enc data: ', data, variables);
+  //     console.log('recovered addy: ', address);
+  //   },
+  // })
+
+  useEffect(() => {
+    const ciphertext = CryptoJS.AES.encrypt(body, recipient).toString();
+    setCiphertext(ciphertext);
+  }, [body])
+
+  const submit = () => {
+    // signMessage({message: body});
+
+    
+
+    // console.log(ciphertext);
+    // const bytes = CryptoJS.AES.decrypt(ciphertext, recipient);
+    // const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    // console.log(decryptedData);
+
+    console.log(body);
+    console.log(ciphertext);
+    console.log(config);
+
+
+    write();
+  }
 
   return (
     <div>
@@ -128,7 +165,7 @@ const ComposeEmail = () => {
             disabled={disabledButton}
             onClick={(e) => {
               e.preventDefault();
-              write();
+              submit();
             }}
             className={`border-2 border-gray-100 rounded-lg px-2 py-2 shadow " +
               ${

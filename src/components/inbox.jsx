@@ -5,6 +5,7 @@ import { useContractRead } from "wagmi";
 import sorceryMailAbi from "../constants/sorceryMailAbi";
 import { smartContractAddress } from "../constants/smartContractAddress";
 import moment from "moment";
+import CryptoJS from "crypto-js";
 
 const Inbox = ({ updateSetOpenEmail }) => {
   const [reformattedData, setReformattedData] = useState([]);
@@ -23,13 +24,17 @@ const Inbox = ({ updateSetOpenEmail }) => {
       for (let i = 0; i < data[0]?.length; i++) {
         console.log("Name", data[0][i]);
         let recipient = data[1][i];
-        if (recipient === signer?._address) {
+        const timestamp = moment(data[4][i]);
+        if (recipient === signer?._address && timestamp.isAfter(moment("12/05/2022"))) {
           console.log(recipient);
           console.log(signer?._address);
+          const ciphertext = data[3][i];
+          const bytes = CryptoJS.AES.decrypt(ciphertext, recipient);
+          const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
           let emailFields = {
             from: data[0][i],
             subject: data[2][i],
-            body: data[3][i],
+            body: decryptedData,
             timeStamp: data[4][i],
           };
           console.log("DATAAATATATA", moment(data[4][i]).format("MMM D"));
